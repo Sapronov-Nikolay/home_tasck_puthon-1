@@ -1,0 +1,6 @@
+Знакомство с языком Python/
+├── Project_structure.txt
+├── lesson_1_task_1.py
+├── lesson_1_task_2.py
+├── structure_app.py
+└── Шпаргалка по GITHUB.txt
