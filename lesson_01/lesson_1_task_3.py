@@ -6,6 +6,17 @@ sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")
 # ========== ДАЛЕЕ КОД УПРАЖНЕНИЯ ==========
 
 # ЗАДАНИЕ: Получите пользовательский ввод
+# ВЫРИАНТ 1: Вывод в f"строкой"
 first_name = input("Введите ваше имя: ")
 last_name = input("Введите вашу фамилию: ")
 print (f"Здравствуйте, {last_name} {first_name}")
+
+# ВЫРИАНТ 2: Вывод с конкатенацией (соединение в одно целое)
+first_name = input("Введите ваше имя: ")
+last_name = input("Введите вашу фамилию: ")
+print("Вас зовут: " + last_name + " " + first_name)
+
+# ВЫРИАНТ 3: Вывод с форматированием через старую функцию ' "... {}".format() '
+first_name = input("Введите ваше имя: ")
+last_name = input("Введите вашу фамилию: ")
+print("Вас зовут: {} {}".format(last_name, first_name))
