@@ -1,4 +1,10 @@
 Знакомство с языком Python/
+├── lesson1-one
+│   ├── lesson1-one_task-1.py
+│   ├── lesson1-one_task-2.py
+│   ├── lesson1-one_task-3.py
+│   ├── lesson1-one_task-4.py
+│   └── lesson1-one_task-5.py
 ├── lesson_01
 │   ├── lesson_1_task_1.py
 │   ├── lesson_1_task_2.py
