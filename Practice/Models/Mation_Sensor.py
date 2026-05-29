@@ -78,6 +78,8 @@ class MotionSensor:
         self.sensor_y = sensor_y    # Ссылка на координаты центра датчика по оси Y
         self.radius = radius    # Ссылка на радиус зоны действия датчика
         self.timer = None       # Ссылка для ID таймера (для отмены)
+        self.last_x = person.x  # Ссылка для запоминания позиции по оси X
+        self.last_y = person.y  # Ссылка для запоминания позиции по оси Y
         # Рисуем пунктирную окружность - зону действия датчика
         self.sensor_id = canvas.create_oval(
             sensor_x - radius, sensor_y - radius, sensor_x + radius, sensor_y + radius,
@@ -87,13 +89,20 @@ class MotionSensor:
         self.check()
 
     def check(self):
-        """Проверяет расстояние до синего квадратика и управляет лампой"""
+        """Проверяет расстояние до синего квадратика и его движение и управляет лампой"""
         # Вычисляем разницу координат между центром датчика и центром синего квадратика
         dx = self.sensor_x - self.person.x
         dy = self.sensor_y - self.person.y
         # Формула расстояния между двумя точками (теорема Пифагора)
         distance = math.sqrt(dx ** 2 + dy ** 2)
-        if distance <= self.radius:
+
+        # Проверяем, двигается ли квадратик
+        moved = (abs(self.person.x - self.last_x) > 1 or
+                 abs(self.person.y - self.last_y) > 1)
+        self.last_x = self.person.x
+        self.last_y = self.person.y
+
+        if distance <= self.radius and moved:
             # Человек внутри или коснулся зоны: включаем лампу
             self.lamp.turn_on()
             # Если таймер уже установлен - отменяем его
@@ -191,8 +200,8 @@ class App:
         # Проверяем, находится ли курсор внутри квадратика
         if x1 <= x <= x2 and y1 <= y <= y2:
             self.dragging = True
-            self.offset_x = x1 - person.x
-            self.offset_y = y1 - person.y
+            self.offset_x = person.x - x
+            self.offset_y = person.y - y
 
     def on_mouse_drag(self, event):
         """Обработчик движения мыши с зажатой клавишей - перемещает объект"""
@@ -200,8 +209,8 @@ class App:
             x, y = event.x, event.y
             # Вычисляем новую позицию центра объекта
             # Вычисляем сохранённое смещение, чтобы курсор оставался в той же точке смещения
-            new_x = x - self.offset_x
-            new_y = y - self.offset_y
+            new_x = x + self.offset_x
+            new_y = y + self.offset_y
             # Перемещаем объект в новую позицию
             self.person.move_to(new_x, new_y)
 
@@ -218,7 +227,11 @@ class App:
         Передвигает квадратик в позицию курсора (режим следования).
         :param event: объект события, содержащий координаты курсора (event.x, event.y)
         """
-        self.person.move_to(event.x, event.y) # Переместить синий квадратик в позицию курсора
+        # Вместо мгновенного следования за курсором - двигаемся с 40%-ым отставанием
+        dx = event.x - self.person.x
+        dy = event.y - self.person.y
+        self.person.move_to(self.person.x + dx * 0.03,
+                            self.person.y + dy * 0.03) # Переместить синий квадратик в позицию курсора плавно
 
 
 # Запускаем окно по требованию пользователя, чтоб весь файл запустился, а не отработал в терминале
