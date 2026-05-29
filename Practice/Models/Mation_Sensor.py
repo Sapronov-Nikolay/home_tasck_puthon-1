@@ -83,7 +83,7 @@ class MotionSensor:
         # Рисуем пунктирную окружность - зону действия датчика
         self.sensor_id = canvas.create_oval(
             sensor_x - radius, sensor_y - radius, sensor_x + radius, sensor_y + radius,
-            outline='#e0fe7a', dash=(4, 4) # dash создаёт пунктирную линию
+            outline='#575341', dash=(8, 5), width=2 # dash создаёт пунктирную линию
         )
         # Запускаем бесконечную проверку положения синего квадратика
         self.check()
@@ -150,14 +150,17 @@ class App:
 
         # Создаём объекты: синий квадратик, лампа, датчик
         self.person = Person(self.canvas, 100, 100) # Квадратик стартует в (100, 100)
-        self.lamp = Lamp(self.canvas, 300, 200) # Лампа в (300, 200)
-        # Датчик: центр в (150, 150), радиус 80
-        self.sensor = MotionSensor(self.canvas, self.person, self.lamp, 150, 150, radius=80)
-        # Флаг режима: True - перетаскивание, False - следование за курсором
+        self.target_x = self.person.x
+        self.target_y = self.person.y
         self.grag_mode = False
         self.dragging = False # Флаг: перетаскивание (активно оно или нет)
         self.offset_x = 0   # Смещение по X от центра объекта до курсора
         self.offset_y = 0   # Смещение по Y от центра объекта до курсора
+        self.animate()
+        self.lamp = Lamp(self.canvas, 300, 200) # Лампа в (300, 200)
+        # Датчик: центр в (150, 150), радиус 80
+        self.sensor = MotionSensor(self.canvas, self.person, self.lamp, 150, 150, radius=80)
+        # Флаг режима: True - перетаскивание, False - следование за курсором
         # Привязываем события в зависимости от режима
         self.setup_bindings()
 
@@ -224,15 +227,21 @@ class App:
     def on_mouse_move(self, event):
         """
         Обработчик движения мыши.
-        Передвигает квадратик в позицию курсора (режим следования).
-        :param event: объект события, содержащий координаты курсора (event.x, event.y)
+        Просто запоминаем позицию курсора, куда нужно двигаться.
         """
         # Вместо мгновенного следования за курсором - двигаемся с 40%-ым отставанием
-        dx = event.x - self.person.x
-        dy = event.y - self.person.y
-        self.person.move_to(self.person.x + dx * 0.03,
-                            self.person.y + dy * 0.03) # Переместить синий квадратик в позицию курсора плавно
+        self.target_x = event.x
+        self.target_y = event.y
 
+    def animate(self):
+        """Постоянно подтягивает синий квадратик к целевой точке (курсору)."""
+        if not self.grag_mode: # Только в режиме следования
+            dx = self.target_x - self.person.x
+            dy = self.target_y - self.person.y
+            if abs(dx) > 1 or abs(dy) > 1:
+                self.person.move_to(self.person.x + dx * 0.15,
+                                    self.person.y + dy * 0.15)
+        self.root.after(30, self.animate)
 
 # Запускаем окно по требованию пользователя, чтоб весь файл запустился, а не отработал в терминале
 if __name__ == '__main__':
