@@ -1,4 +1,5 @@
 # security_system.py
+import time
 import threading
 import keyboard
 from door import Door
@@ -95,35 +96,91 @@ class SecuritySystem:
             Вызывается по нажатию клавиши 'n'
             Временно отключает все горячие клавиши, чтобы ввод не перехватывался,
             запрашивает число, устанавливает боезапас, затем восстанавливает клавиши.
+            Поддерживает знаки перед числом + и -.
+            +N - добавить N патронов в пределах диапазона от 0 до 500
+            -N - отнять N патронов но не ниже 0
+            N  - установить абсолютное значение N (0-500)
         """
         if not self.control_enabled:
             return
-        # 1. Отключаем все горячие клавиши
-        for h in self.hotkeys:
-            keyboard.remove_hotkey(h)
-        self.hotkeys.clear()
-        print("\n[Турель] Введите количество патронов (0-500): ", end="", flush=True)
+        self.control_enabled = False
+        print("\n[Турель] Введите количество патронов в пределах (0-500): 100, +50, -20)", end="", flush=True)
         # 2. Цикл ввода с проверкой корректности
         while True:
-            ammo_input = input().strip()
-            # Удаляем из строки всё, кроме цифр (защита от лишних символов)
+            raw = input().strip()
+            if not raw:
+                print("[Турель] Пустой ввод. Повторите: ", end="", flush=True)
+                continue
+
+            # Убираем всё, кроме цифр и знаков +-
             import re
-            digits = re.sub(r'\D', '', ammo_input)
-            if digits:
-                new_ammo = int(digits)
-                if 0 <= new_ammo <= self.turret.max_ammo:
-                    self.turret.ammo = new_ammo
-                    print(f"[Турель] Боезапас установлен: {new_ammo}")
-                    self._play_sound("reload")
-                    break
+            clean = re.sub(r'[^0-9+-]', '', raw)
+            if not clean:
+                print("[Турель] Ошибка: не найдены цифры. Повторите ввод: ", end="", flush=True)
+                continue
+
+            # Определяем знак
+            sign = None             # Поумолчанию делаем пустой
+            if '+' in clean and '-' not in clean:
+                sign = '+'
+                num_part = clean.replace('+', '')
+            elif '-' in clean and '+' not in clean:
+                sign = '-'
+                num_part = clean.replace('-', '')
+            elif '+' in clean and '-' in clean:
+                if clean.find('+') < clean.find('-'):
+                    sign = '+'
+                    num_part = clean.replace('+', '')
                 else:
-                    print(f"[Турель] Ошибка: число должно быть от 0 до {self.turret.max_ammo}. Повторите ввод: ",
-                          end="", flush=True)
+                    sign = '-'
+                    num_part = clean.replace('-', '')
             else:
-                print("[Турель] Ошибка: введите целое число (только цифры). Повторите ввод: ", end="", flush=True)
-        # 3. Восстанавливаем горячие клавиши
-        self._register_hotkeys()
-        print("[Управление] Горячие клавиши восстановлены.")
+                sign = None
+                num_part = clean
+
+            digits = re.sub(r'\D', '', num_part)
+            if not digits:
+                print("[Турель] Ошибка: не найдены цифры. Повторите ввод: ", end="", flush=True)
+                continue
+
+            number = int(digits)
+            # Выполняем операцию
+            current = self.turret.ammo
+            max_ammo = self.turret.max_ammo
+
+            if sign == '+':
+                new_value = current + number
+                if new_value > max_ammo:
+                    added = max_ammo - current
+                    new_ammo = new_value
+                    print(f"[Турель] Добавлено только {added} патронов (магазин полон).")
+                else:
+                    print(f"[Турель] Добавлено {number} патронов.")
+            elif sign == '-':
+                new_value = current - number
+                if new_value < 0:
+                    removed = current
+                    new_value = 0
+                    print(f"[Турель] Снято {removed} патронов (больше нет).")
+                else:
+                    print(f"[Турель] Снято {number} патронов.")
+            else:
+                # Абсолютная установка
+                if 0 <= number <= max_ammo:
+                    new_value = number
+                    print(f"[Турель] Боезапас установлен: {number}")
+                else:
+                    print(f"[Турель] Ошибка: число должно быть от 0 до {max_ammo}. Повторите ввод: ", end="", flush=True)
+                    continue
+
+            # Применяем новое значение (оно уже в диапазоне)
+            self.turret.ammo = new_value
+            print(f"[Турель] Текущий боезапас: {self.turret.ammo}")
+            self._play_sound("reload")
+            break
+
+        self.control_enabled = True
+        print("[Управление] Управление возобновлено.")
 
     # --- Управление паузой ---
 
