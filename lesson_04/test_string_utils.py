@@ -51,13 +51,15 @@ def test_trim_positive(input_str, expected):
 @pytest.mark.negative
 @pytest.mark.parametrize("input_str, expected", [
     ("", ""),
-    ("   ", "")
+    ("   ", ""),
+  # (None, "") # assert не умеет ловить исключения. Для проверки исключений нужно использовать pytest.raises.
 ])
 def test_trim_negative(input_str, expected):
     assert string_utils.trim(input_str) == expected
 
-# Негативный тест: передача None вместо строки.
+# Негативный тест: передача None вместо строки. Используем pytest.raises
 # Метод должен выбросить AttributeError, так как у None нет метода startswith().
+# Мы говорим программе - не падай! None это не приговор, иди дальше
 def test_trim_negative_none():
     with pytest.raises(AttributeError):
         string_utils.trim(None)
@@ -124,15 +126,13 @@ def test_delete_symbol_positive(string, symbol, expected):
     3. Передача None вместо строки → Оштбка AttributeError
     4. Передача строки вместо символа None → Ошибка TyprError
 """
-# Убеждаемся, что если мы что-то удаляем из пустоты, то туда не добавится ничего и пустота останется
 @pytest.mark.negative
-def test_delete_symbol_negative():
-    assert string_utils.delete_symbol("", "a") == ""
-
-# Убеждаемся, если не нашлось, что удалить в строке, то это не удалит всю строку
-@pytest.mark.negative
-def test_delete_symbol_negative():
-    assert string_utils.delete_symbol("ABC", "") == "ABC"
+@pytest.mark.parametrize("string, symbol, expected", [
+    ("", "a",""),      # Пустая строка должна остаться пустой
+    ("ABC", "", "ABC")
+])
+def test_delete_symbol_negative_empty(string, symbol, expected):
+    assert string_utils.delete_symbol(string, symbol) == expected
 
 # Проверяем, что программа выбрасывает не что-то непонятное, а понятные ошибки
 @pytest.mark.negative
@@ -140,6 +140,6 @@ def test_delete_symbol_negative():
     (None, "a", AttributeError),
     ("ABC", None, TypeError)
 ])
-def test_delete_symbol_negative(string, symbol, expected):
+def test_delete_symbol_negative_none(string, symbol, expected):
     with pytest.raises(expected):
-        string_utils.contains(string, symbol)
+        string_utils.delete_symbol(string, symbol)
