@@ -126,7 +126,7 @@ def test_shop():
     continue_btn.click()
     wait.until(EC.url_contains("checkout-step-two.html"))
     # 26. Выводим в консоль
-    print(" ✅ Преход страницу итогов выполнен  - ссылка соответствует .../checkout-step-two.html")
+    print(" ✅ Переход страницу итогов выполнен  - ссылка соответствует .../checkout-step-two.html")
 
     # 27. Получаем итоговую сумму: она в конце страницы - нужен скролл
     # Скролим страницу до отображения <div class="summary_total_label" data-test="total-label">Total: $58.29</div>
