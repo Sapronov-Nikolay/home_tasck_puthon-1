@@ -3,6 +3,7 @@
 Базовый класс для всех страниц.
 Содержит общие методы, которые используются в любом PageObject.
 Это позволяет не дублировать код в каждом классе страницы.
+Для третьего теста появляются scroll_to и get_attribute -
 """
 from selenium.webdriver.support.expected_conditions import element_to_be_clickable
 from selenium.webdriver.support.wait import WebDriverWait
@@ -33,3 +34,15 @@ class BasePage:
         """Получить видимый текст элемента"""
         return self.find_element(locator).text
 
+    def get_attribute(self, locator, attr):
+        """Получение значения для результата итогов"""
+        return self.find_element(locator).get_attribute(attr)
+
+    def scroll_to(self, locator):
+        """Прокрутить страницу до элемента итогов"""
+        element = self.find_element(locator)
+        self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", element)
+
+    def wait_for_url_contains(self, text):
+        """Ожидание, пока URL не начнёт содержать указанный текст. Что означает - переход на другую страницу"""
+        self.wait.until(EC.url_contains(text))
