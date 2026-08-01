@@ -57,7 +57,7 @@ try:
     })
     resp.raise_for_status()
     # Из ответа берём только сам ключ.
-    api_keys = resp.json()["keys"]
+    api_key = resp.json()["key"]
     # Выводим первые 20 символов, чтобы не светить весь ключ в логах.
     print(f"✅ API-ключ (токен) получен: {api_key[:20]}...")
 except Exception as e:
@@ -74,5 +74,6 @@ set_key(env_file, "YOUGILE_PASSWORD", PASSWORD)
 set_key(env_file, "YOUGILE_COMPANY_ID", company_id)
 set_key(env_file, "YOUGILE_CURRENT_KEY", api_key)
 
+print("\n" + "=" * 60)
 print("\n✅ .env создан и заполнен.")
 print("   Теперь можно запускать тесты: pytest tests/test_projects.py -v")
