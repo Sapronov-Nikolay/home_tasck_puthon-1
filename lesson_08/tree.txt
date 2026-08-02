@@ -1,0 +1,19 @@
+📁 lesson_08/
+📊 Итог: Папок: 3, Файлов: 13, Уровней вложенности: 3
+
+├── README.md
+├── conftest.py
+├── key_manager.py
+├── requirements.txt
+├── run.bat
+├── run.sh
+├── setup_env.py
+├── src
+│   ├── __init__.py
+│   ├── api_client.py
+│   └── pages
+│       ├── __init__.py
+│       └── project_page.py
+└── tests
+    ├── __init__.py
+    └── test_projects.py

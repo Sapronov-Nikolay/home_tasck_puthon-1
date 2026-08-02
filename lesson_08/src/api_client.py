@@ -65,11 +65,17 @@ class YouGileApiClient:
             payload = {
                 "login": self.login,
                 "password": self.password,
-                "company_id": self.company_id
+                "companyId": self.company_id
             }
             resp = requests.post(url, json=payload)
             # raise_for_status() выдаст исключение, если сервер вернул ошибку (4хх/5хх).
             # Это защищает от "тихих" сбоев при получении ключа.
+
+            print("🔍 Отправляем запрос на получение ключа:")
+            print("URL:", url)
+            print("Payload:", payload)
+            print("Ответ статус:", resp.status_code)
+            print("Тело ответа:", resp.text)
             resp.raise_for_status()
             self._token = resp.json()["key"]
 

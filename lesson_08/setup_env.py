@@ -53,7 +53,7 @@ try:
     resp = requests.post(f"{BASE_URL}/api-v2/auth/keys", json={
         "login": LOGIN,
         "password": PASSWORD,
-        "company_id": company_id
+        "companyId": company_id
     })
     resp.raise_for_status()
     # Из ответа берём только сам ключ.
