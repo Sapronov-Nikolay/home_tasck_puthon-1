@@ -1,7 +1,7 @@
 # conftest.py
 # Фикстуры для pytest. Добавляют src/ в путь и создают тестовые проекты.
 
-import sys
+import sys, time
 from pathlib import Path
 
 # Добавляем папку src/ в sys.path, чтобы импорты работали
@@ -11,6 +11,10 @@ if src_path not in sys.path:
 
 import pytest
 from src.pages.project_page import ProjectPage
+from faker import Faker
+
+# Импортируем Faker для автоматических наименований, чтобы не возникали проблемы
+fake = Faker()   # объект для генерации случайных названий
 
 @pytest.fixture(scope='session')
 def project_page():
@@ -24,15 +28,8 @@ def temp_project(project_page):
         а после теста скрывает его (deleted: true), так как API YouGile. Возвращает ID проекта
         не поддерживает физическое удаление проектов.
     """
-    import time
     # Решили использовать Faker для генерации имён (названий)
-    try:
-        from faker import Faker
-        faker = Faker()
-        title = f"Проект {faker.word()}"
-    except ImportError:
-        title = f"AutoTest_{int(time.time())}"
-
+    title = f"Проект {fake.word()}"
     resp = project_page.create(title)
     assert resp.status_code == 201, "Не удалось создать проект"
     project_id = resp.json()["id"]
