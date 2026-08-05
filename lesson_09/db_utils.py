@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine, text, inspect
 
 # Формат: postgresql://пользователь:пароль@хост:порт/имя_базы
 DB_STRING = "postgresql://myuser:mypassword@localhost:5432/mydatabase"
@@ -7,6 +7,26 @@ DB_STRING = "postgresql://myuser:mypassword@localhost:5432/mydatabase"
 engine = create_engine(DB_STRING)
 
 # Создаём таблицу с колонками для имени и возраста
+
+def create_table_if_not_exists():
+    """Создаёт таблицу students, если она не существует."""
+    with engine.connect() as connection:
+        inspector = inspect(engine)
+        if not inspector.has_table("students"):
+            connection.execute(text("""
+                CREATE TABLE students (
+                    id SERIAL PRIMARY KEY,
+                    name VARCHAR(100) NOT NULL,
+                    age INTEGER
+                )
+            """))
+            connection.commit()
+            print("✅ Таблица students создана.")
+        else:
+            print("ℹ️ Таблица students уже существует.")
+
+create_table_if_not_exists()
+
 def add_student(name, age):
     '''Добавляем студента в таблицу students'''
     with engine.connect() as connection:
@@ -29,6 +49,7 @@ def get_student_by_id(student_id):
         # .first() - будет только первую строку (потому что по ID обычно один студент).
         # Если ничего не найдено - вернёт None, а не ошибку.
         return result. mappings().first()
+
 
 def update_student_age(student_id, new_age):
     """Обновить возраст студента по ID"""
