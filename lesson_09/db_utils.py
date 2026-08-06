@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine, text, inspect
 
 # Формат: postgresql://пользователь:пароль@хост:порт/имя_базы
-DB_STRING = "postgresql://myuser:mypassword@localhost:5432/mydatabase"
+DB_STRING = "postgresql://postgres:quein@localhost:5432/mydatabase"
 
 # Он не подключается сразу, а хранит настройки: куда стучаться, как переподключиться, сколько держать соединений.
 engine = create_engine(DB_STRING)
@@ -13,15 +13,19 @@ def create_table_if_not_exists():
     with engine.connect() as connection:
         inspector = inspect(engine)
         if not inspector.has_table("students"):
-            connection.execute(text("""
-                CREATE TABLE students (
-                    id SERIAL PRIMARY KEY,
-                    name VARCHAR(100) NOT NULL,
-                    age INTEGER
-                )
-            """))
-            connection.commit()
-            print("✅ Таблица students создана.")
+            try:
+                connection.execute(text("""
+                    CREATE TABLE students (
+                        id SERIAL PRIMARY KEY,
+                        name VARCHAR(100) NOT NULL,
+                        age INTEGER
+                    )
+                """))
+                connection.commit()
+                print("✅ Таблица students создана.")
+            except Exception as e:
+                print(f"❌ ОШИБКА при создании таблицы: {e}")
+                raise  # Перебросить исключение, чтобы тест упал и мы увидели
         else:
             print("ℹ️ Таблица students уже существует.")
 

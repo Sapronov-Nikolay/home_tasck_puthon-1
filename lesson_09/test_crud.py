@@ -1,5 +1,4 @@
 import pytest
-from requests import delete
 
 from db_utils import add_student, get_student_by_id, update_student_age, delete_student, get_all_students
 
