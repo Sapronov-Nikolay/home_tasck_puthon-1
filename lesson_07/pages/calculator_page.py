@@ -5,6 +5,7 @@
 Добавляет свой метод wait_for_result, который использует self.wait.wait напрямую
 """
 
+import allure
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -20,6 +21,7 @@ class CalculatorPage(BasePage):
         """Вернуть локатор для кнопки по её тексту (7, +, 8, =)."""
         return (By.XPATH, f"//span[text()='{text}']")
 
+    @allure.step("открываем страницу калькулятора")
     def open(self):
         """Открыть страницу калькулятора"""
         self.driver.get("https://bonigarcia.dev/selenium-webdriver-java/slow-calculator.html")
@@ -27,18 +29,22 @@ class CalculatorPage(BasePage):
         # Дожидаемся появления поля задержки, чтобы убедиться, что страница загружена
         self.wait.until(EC.visibility_of_element_located(self.DELAY_INPUT))
 
+    @allure.step("Установить задержку {seconds} секунд")
     def set_delay(self, seconds):
         """Установить задержку в поле #delay"""
         self.send_keys(self.DELAY_INPUT, str(seconds))
 
+    @allure.step("Нажать кнопку '{text}'")
     def click_button(self, text):
         """Нажать кнопку с заданным текстом"""
         self.click(self.get_button_locator(text))
 
+    @allure.step("Получить результат из экрана калькулятора")
     def get_result(self):
         """Получить текст из экрана калькулятора (div.screen)"""
         return self.get_text(self.SCREEN)
 
+    @allure.step("Ожидать результат '{expected_text}'")
     def wait_for_result(self, expected_text, timeout=50):
         """Ожидать результат ожидаемого текста в экране (таймаут 50 сек)"""
         wait = WebDriverWait(self.driver, timeout)
