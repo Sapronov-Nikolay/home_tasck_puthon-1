@@ -1,0 +1,104 @@
+📁 lesson_07/
+📊 Итог: Папок: 14, Файлов: 87, Уровней вложенности: 4
+
+├── readme.md
+├── test_01_form.py
+├── test_02_calc.py
+├── test_03_shop.py
+├── test_03_shop_add.py
+├── tree.txt
+├── PDF-order
+│   └── swag-labs-order-2026-08-16_22-27-28.pdf
+├── __pycache__
+│   ├── test_01_form.cpython-313-pytest-9.1.0.pyc
+│   ├── test_01_form.cpython-313-pytest-9.1.1.pyc
+│   ├── test_02_calc.cpython-313-pytest-9.1.0.pyc
+│   ├── test_02_calc.cpython-313-pytest-9.1.1.pyc
+│   ├── test_03_shop.cpython-313-pytest-9.1.0.pyc
+│   ├── test_03_shop.cpython-313-pytest-9.1.1.pyc
+│   ├── test_03_shop_add.cpython-313-pytest-9.1.0.pyc
+│   └── test_03_shop_add.cpython-313-pytest-9.1.1.pyc
+├── allure-report
+│   ├── index.html
+│   ├── assets
+│   │   ├── favicon-BDLHVmV7.ico
+│   │   └── index-CxrWfNlX.js
+│   ├── data
+│   │   ├── behaviors.csv
+│   │   ├── behaviors.json
+│   │   ├── categories.csv
+│   │   ├── categories.json
+│   │   ├── packages.json
+│   │   ├── suites.csv
+│   │   ├── suites.json
+│   │   ├── timeline.json
+│   │   ├── attachments
+│   │   │   ├── 510e3909c8caeaa1.txt
+│   │   │   ├── e35ed931afaa9ae9.txt
+│   │   │   ├── f1da3efadd3d146b.txt
+│   │   │   └── f585ef118861df29.txt
+│   │   └── test-cases
+│   │       ├── 3aa5f2f68b817b3b.json
+│   │       ├── ba30f84599b97ebb.json
+│   │       ├── baec5bcd42e7eb5e.json
+│   │       └── d4d6740a4b4a27b5.json
+│   ├── export
+│   │   ├── influxDbData.txt
+│   │   ├── mail.html
+│   │   └── prometheusData.txt
+│   ├── history
+│   │   ├── categories-trend.json
+│   │   ├── duration-trend.json
+│   │   ├── history-trend.json
+│   │   ├── history.json
+│   │   └── retry-trend.json
+│   └── widgets
+│       ├── behaviors.json
+│       ├── categories-trend.json
+│       ├── categories.json
+│       ├── duration-trend.json
+│       ├── duration.json
+│       ├── environment.json
+│       ├── executors.json
+│       ├── history-trend.json
+│       ├── launch.json
+│       ├── retry-trend.json
+│       ├── severity.json
+│       ├── status-chart.json
+│       ├── suites.json
+│       └── summary.json
+├── allure-result
+│   ├── 37d08cbd-e73d-4b3b-ab20-a3d598689548-attachment.txt
+│   ├── 6ee135f4-e79f-4791-8883-2a9176696b5f-attachment.txt
+│   ├── 7764b745-fe6e-4fb1-9fa3-4f295b2aa2e1-attachment.txt
+│   ├── 89310a34-a968-4f82-8f9a-11381441f330-result.json
+│   ├── c39bdb2d-cb10-45e9-8a98-230756e630f0-result.json
+│   ├── dfc0ce3b-de58-41ac-833c-752741113dd8-attachment.txt
+│   ├── e8b3e8e2-5431-4dcd-abe9-3cdce9d5c9c1-result.json
+│   ├── ee977c33-50f9-4c10-b958-5f6ed936437b-container.json
+│   └── f15763c4-8b0d-4e95-8230-fa15d046c12b-result.json
+├── pages
+│   ├── base_page.py
+│   ├── calculator_page.py
+│   ├── cart_page.py
+│   ├── checkout_complete_page.py
+│   ├── checkout_step_one_page.py
+│   ├── checkout_step_two_page.py
+│   ├── form_page.py
+│   ├── inventory_page.py
+│   ├── login_page.py
+│   └── __pycache__
+│       ├── base_page.cpython-313.pyc
+│       ├── calculator_page.cpython-313.pyc
+│       ├── cart_page.cpython-313.pyc
+│       ├── checkout_complete_page.cpython-313.pyc
+│       ├── checkout_step_one_page.cpython-313.pyc
+│       ├── checkout_step_two_page.cpython-313.pyc
+│       ├── form_page.cpython-313.pyc
+│       ├── inventory_page.cpython-313.pyc
+│       └── login_page.cpython-313.pyc
+└── screen_07-img
+    ├── test01_form.png
+    ├── test02_calc.png
+    ├── test03_shop.png
+    └── test03_shop_finish.png
