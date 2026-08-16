@@ -17,11 +17,12 @@ class CalculatorPage(BasePage):
     SCREEN = (By.CLASS_NAME, "screen")
 
     @staticmethod
+    @allure.step("Помощь в распознении текстовых символов на кнопках")
     def get_button_locator(text):
         """Вернуть локатор для кнопки по её тексту (7, +, 8, =)."""
         return (By.XPATH, f"//span[text()='{text}']")
 
-    @allure.step("открываем страницу калькулятора")
+    @allure.step("Открываем страницу калькулятора")
     def open(self):
         """Открыть страницу калькулятора"""
         self.driver.get("https://bonigarcia.dev/selenium-webdriver-java/slow-calculator.html")
