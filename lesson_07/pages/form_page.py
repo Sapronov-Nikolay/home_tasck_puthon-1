@@ -25,7 +25,7 @@ class FormPage(BasePage):
 
     @allure.step("Открыть страницу формы")
     def open(self):
-        """Открыт страницу формы"""
+        """Открыть страницу формы"""
         self.driver.get("https://bonigarcia.dev/selenium-webdriver-java/data-types.html")
         self.driver.maximize_window()
 
