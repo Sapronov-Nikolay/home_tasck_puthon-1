@@ -4,12 +4,13 @@
 URL: https://bonigarsia.dev/selenium-webdriver-java/data-types.html
 """
 
+import allure
 from selenium.webdriver.common.by import By
 from .base_page import BasePage
 
 
 class FormPage(BasePage):
-    # Локаторы полей (определяем по name, тфк как до отправки это input`ы)
+    # Локаторы полей (определяем по name, так как до отправки это input`ы)
     FIRST_NAME = (By.NAME, 'first-name')
     LAST_NAME = (By.NAME, 'last-name')
     ADDRESS = (By.NAME, 'address')
@@ -22,11 +23,13 @@ class FormPage(BasePage):
     COMPANY = (By.NAME, 'company')
     SUBMIT_BUTTON = (By.XPATH, '//button[@type="submit"]')
 
+    @allure.step("Открыть страницу формы")
     def open(self):
         """Открыт страницу формы"""
         self.driver.get("https://bonigarcia.dev/selenium-webdriver-java/data-types.html")
         self.driver.maximize_window()
 
+    @allure.step("Заполнить форму данными")
     def fill_form(self, data):
         """Заполняем поля данными"""
         self.send_keys(self.FIRST_NAME, data["first_name"])
@@ -40,20 +43,24 @@ class FormPage(BasePage):
         self.send_keys(self.JOB, data["job_position"])
         self.send_keys(self.COMPANY, data["company"])
 
+    @allure.step("Нажать Submit")
     def submit(self):
         """Нажать кнопку Submit."""
         self.click(self.SUBMIT_BUTTON)
 
+    @allure.step("Получить значение класса поля по ID")
     def get_field_class(self, field_id):
         """После кнопки submit поля из <div> на id. Возвращает значение класса."""
         locator = (By.ID, field_id)
         # Пока нет метода get_attribute до написания 3-его теста используем driver напрямую
         return self.driver.find_element(*locator).get_attribute("class")
 
+    @allure.step("Проверить, что поле красное (содержит alter-danger)")
     def is_field_red(self, field_id):
         """Проверить, что поле красное (содержит alter-danger)."""
         return "alert-danger" in self.get_field_class(field_id)
 
+    @allure.step("Проверить, что поле зелёное(содержит alter-success)")
     def is_field_green(self, field_id):
         """Проверить, что поле зелёное (содержит alter-success)."""
         return "alert-success" in self.get_field_class(field_id)
