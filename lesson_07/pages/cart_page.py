@@ -3,6 +3,7 @@
 Страница корзины.
 """
 
+import allure
 from selenium.webdriver.common.by import By
 from .base_page import BasePage
 from .checkout_step_one_page import CheckoutStepOnePage
@@ -12,10 +13,12 @@ class CartPage(BasePage):
     CART_ITEMS = (By.CLASS_NAME, "cart_item")
     ITEM_NAME = (By.CLASS_NAME, "inventory_item_name")
 
+    @allure.step("Получить количество товаров в корзине")
     def get_item_name(self):
         """Количество товаров в корзине - циферка на ярлыке корзины"""
         return len(self.driver.find_elements(*self.CART_ITEMS))
 
+    @allure.step("Получить список названий товаров в корзине")
     def get_item_names(self):
         """Список названий товаров положенных в корзину"""
         items = self.driver.find_elements(*self.CART_ITEMS)
@@ -25,6 +28,7 @@ class CartPage(BasePage):
             names.append(name_elem.text)
         return names
 
+    @allure.step("Нажать Checkout")
     def proceed_to_checkout(self):
         """Нажать Checkout"""
         self.click(self.CHECKOUT_BUTTON)
