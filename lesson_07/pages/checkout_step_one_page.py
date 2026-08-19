@@ -3,6 +3,7 @@
 Страница оформления заказа (шаг 1) - ввод данных покупателем.
 """
 
+import allure
 from selenium.webdriver.common.by import By
 from .base_page import BasePage
 from .checkout_step_two_page import CheckoutStepTwoPage
@@ -14,6 +15,7 @@ class CheckoutStepOnePage(BasePage):
     POSTAL_CODE_INPUT = (By.ID, "postal-code")
     CONTINUE_BUTTON = (By.ID, "continue")
 
+    @allure.step("Заполнить данные покупателя")
     def fill_customer_info(self, first_name, last_name, postal_code):
         """Заполнение формы и нажатие кнопки Continue."""
         self.send_keys(self.FIRST_NAME_INPUT, first_name)

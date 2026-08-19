@@ -3,6 +3,7 @@
 Страница валидации главная www.saucedemo.com
 """
 
+import allure
 from selenium.webdriver.common.by import By
 from .base_page import BasePage
 from .inventory_page import InventoryPage
@@ -13,11 +14,13 @@ class LoginPage(BasePage):
     PASSWORD_INPUT = (By.ID, 'password')
     LOGIN_BUTTON = (By.ID, 'login-button')
 
+    @allure.step("Открыть страницу логина")
     def open(self):
         """Открываем страницу логина"""
         self.driver.get("https://www.saucedemo.com/")
         self.driver.maximize_window()
 
+    @allure.step("Выполнить вход как {username}")
     def login(self, username, password):
         """Выполнить вход и вернуть объект главной страницы"""
         self.send_keys(self.USERNAME_INPUT, username)

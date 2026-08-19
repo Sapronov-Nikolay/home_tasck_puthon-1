@@ -1,0 +1,8 @@
+.idea/
+*.iml
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+allure-report
+allure-result
